@@ -1,3 +1,5 @@
+const API_URL = "https://teo-backend-az8f.onrender.com";
+
 const form = document.getElementById("leadForm");
 const successMsg = document.getElementById("successMsg");
 const errorMsg = document.getElementById("errorMsg");
@@ -17,7 +19,7 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/leads", {
+    const response = await fetch(`${API_URL}/leads`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,12 +27,15 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify(data),
     });
 
-    if (!response.ok) throw new Error();
+    if (!response.ok) {
+      throw new Error("Erro na requisição");
+    }
 
     successMsg.style.display = "block";
     form.reset();
 
   } catch (error) {
+    console.error(error);
     errorMsg.style.display = "block";
   }
 });

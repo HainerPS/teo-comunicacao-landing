@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://teo-backend-az8f.onrender.com";
 
 // verifica se já tem token
 window.onload = () => {
