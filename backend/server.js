@@ -30,6 +30,28 @@ app.get("/db-test", async (req, res) => {
     }
   });
 
+  async function createLeadsTable() {
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS leads (
+          id SERIAL PRIMARY KEY,
+          nome TEXT NOT NULL,
+          email TEXT NOT NULL,
+          telefone TEXT,
+          empresa TEXT,
+          mensagem TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+  
+      console.log("Tabela leads pronta");
+    } catch (error) {
+      console.error("Erro ao criar tabela leads:", error);
+    }
+  }
+  
+  createLeadsTable();
+
 // porta
 const PORT = process.env.PORT || 3000;
 
