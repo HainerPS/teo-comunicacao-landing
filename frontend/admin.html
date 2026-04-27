@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Téo Comunicação</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <div class="login-container" id="loginContainer">
+    <h2>Área Administrativa</h2>
+    <input type="password" id="password" placeholder="Senha" />
+    <button onclick="login()">Entrar</button>
+  </div>
+
+  <div class="dashboard" id="dashboard" style="display: none;">
+    <h2>Leads Recebidos</h2>
+    <button onclick="logout()">Sair</button>
+    <div id="leadsList"></div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

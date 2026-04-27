@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    text-align: center;
+  }
+  
+  .login-container, .dashboard {
+    margin-top: 100px;
+  }
+  
+  input {
+    padding: 10px;
+    margin: 10px;
+    width: 250px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background: #ff0055;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  #leadsList {
+    margin-top: 30px;
+  }
+  
+  .lead {
+    background: #222;
+    padding: 15px;
+    margin: 10px auto;
+    width: 300px;
+    text-align: left;
+  }

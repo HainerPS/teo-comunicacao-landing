@@ -7,6 +7,25 @@ const pool = require("./database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+function authMiddleware(req, res, next) {
+    const authHeader = req.headers.authorization;
+  
+    if (!authHeader) {
+      return res.status(401).json({ error: "Token não fornecido" });
+    }
+  
+    const token = authHeader.split(" ")[1];
+  
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded;
+  
+      next();
+    } catch (error) {
+      return res.status(401).json({ error: "Token inválido" });
+    }
+  }
+
 const app = express();
 
 // middlewares
@@ -105,7 +124,7 @@ app.get("/db-test", async (req, res) => {
     }
   });
 
-  app.get("/leads", async (req, res) => {
+  app.get("/leads", authMiddleware, async (req, res) => {
     try {
       const result = await pool.query(
         "SELECT * FROM leads ORDER BY created_at DESC"
