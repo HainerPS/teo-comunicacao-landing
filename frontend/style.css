@@ -2,76 +2,176 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
   }
   
   body {
-    background: #1a1a1a;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0b0b;
     color: #fff;
+  }
+  
+  .hero {
+    min-height: 100vh;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0.95), rgba(0,0,0,0.65)),
+      url("https://images.unsplash.com/photo-1557804506-669a67965ba0") center/cover;
+    display: flex;
+    align-items: center;
+    padding: 40px 8%;
+    position: relative;
+  }
+  
+  .hero-content {
+    max-width: 780px;
+    z-index: 2;
+  }
+  
+  .hero h1 {
+    font-size: clamp(60px, 12vw, 140px);
+    line-height: 0.85;
+    color: #ff005c;
+    letter-spacing: -4px;
+    font-weight: 900;
+  }
+  
+  .hero h2 {
+    font-size: clamp(24px, 4.5vw, 48px);
+    line-height: 1.1;
+    max-width: 700px;
+    margin: 25px 0;
+    text-transform: uppercase;
+  }
+  
+  .hero h2 span {
+    color: #ff005c;
+  }
+  
+  .hero p {
+    font-size: 18px;
+    max-width: 520px;
+    color: #d9d9d9;
+    margin-bottom: 30px;
+  }
+  
+  .cta-btn {
+    display: inline-block;
+    background: #ff005c;
+    color: #fff;
+    padding: 16px 30px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+  
+  .cta-btn:hover {
+    background: #fff;
+    color: #ff005c;
+  }
+  
+  .about {
+    background: #ff005c;
+    color: #fff;
+    padding: 80px 8%;
+  }
+  
+  .about .container {
+    max-width: 900px;
+  }
+  
+  .about h3 {
+    font-size: clamp(28px, 5vw, 60px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+  }
+  
+  .about p {
+    font-size: 18px;
+    max-width: 650px;
+  }
+  
+  .form-section {
+    background: #f4f4f4;
+    color: #111;
+    padding: 80px 8%;
   }
   
   .container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
   }
   
-  h1 {
-    font-size: 48px;
-    color: #ff0055;
-  }
-  
-  h2 {
-    margin: 10px 0 30px;
-    font-weight: normal;
-  }
-  
-  .cta {
-    margin-bottom: 40px;
-    font-size: 20px;
+  .form-section h3 {
+    font-size: clamp(28px, 4.5vw, 48px);
+    text-transform: uppercase;
+    margin-bottom: 10px;
   }
   
   form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    color: #000;
+    display: grid;
+    gap: 16px;
+    margin-top: 30px;
   }
   
-  input, textarea {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  input,
+  textarea {
+    width: 100%;
+    padding: 18px;
+    border: 2px solid #111;
+    background: transparent;
     font-size: 16px;
+    outline: none;
+  }
+  
+  textarea {
+    min-height: 140px;
+    resize: vertical;
   }
   
   button {
-    padding: 15px;
-    border: none;
-    background: #ff0055;
+    background: #111;
     color: #fff;
-    font-size: 18px;
-    border-radius: 5px;
+    padding: 18px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
     cursor: pointer;
     transition: 0.3s;
   }
   
   button:hover {
-    background: #cc0044;
+    background: #ff005c;
+  }
+  
+  .success,
+  .error {
+    margin-top: 18px;
+    font-weight: 700;
+    display: none;
   }
   
   .success {
-    margin-top: 15px;
     color: green;
-    display: none;
   }
   
   .error {
-    margin-top: 15px;
     color: red;
-    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .hero {
+      padding: 30px 6%;
+    }
+  
+    .hero h1 {
+      letter-spacing: -2px;
+    }
+  
+    .about,
+    .form-section {
+      padding: 60px 6%;
+    }
   }
