@@ -30,6 +30,57 @@ app.get("/db-test", async (req, res) => {
     }
   });
 
+  app.post("/leads", async (req, res) => {
+    try {
+      let { nome, email, telefone, empresa, mensagem } = req.body;
+  
+      // validação básica
+      if (!nome || !email) {
+        return res.status(400).json({
+          error: "Nome e email são obrigatórios",
+        });
+      }
+  
+      // limpeza dos dados
+      nome = nome.trim();
+      email = email.trim();
+      telefone = telefone ? telefone.trim() : null;
+      empresa = empresa ? empresa.trim() : null;
+      mensagem = mensagem ? mensagem.trim() : null;
+  
+      const result = await pool.query(
+        `INSERT INTO leads (nome, email, telefone, empresa, mensagem)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [nome, email, telefone, empresa, mensagem]
+      );
+  
+      res.status(201).json({
+        message: "Lead salvo com sucesso",
+        lead: result.rows[0],
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao salvar lead" });
+    }
+  });
+
+  app.get("/leads", async (req, res) => {
+    try {
+      const result = await pool.query(
+        "SELECT * FROM leads ORDER BY created_at DESC"
+      );
+  
+      res.json(result.rows);
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao buscar leads" });
+    }
+  });
+
+
   async function createLeadsTable() {
     try {
       await pool.query(`
