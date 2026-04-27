@@ -4,6 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const pool = require("./database");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -63,6 +65,43 @@ app.get("/db-test", async (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Erro ao salvar lead" });
+    }
+  });
+
+  app.post("/login", async (req, res) => {
+    try {
+      const { password } = req.body;
+  
+      if (!password) {
+        return res.status(400).json({ error: "Senha é obrigatória" });
+      }
+  
+      const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+  
+      if (!adminPasswordHash) {
+        return res.status(500).json({ error: "Senha admin não configurada" });
+      }
+  
+      const passwordMatch = await bcrypt.compare(password, adminPasswordHash);
+  
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Senha inválida" });
+      }
+  
+      const token = jwt.sign(
+        { role: "admin" },
+        process.env.JWT_SECRET,
+        { expiresIn: "2h" }
+      );
+  
+      res.json({
+        message: "Login realizado com sucesso",
+        token,
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao fazer login" });
     }
   });
 
