@@ -112,20 +112,22 @@ ADMIN_PASSWORD_HASH=
 
 ---
 
-## 🚀 Como rodar localmente
+### 🚀 Como rodar localmente
 Backend
 
+```bash
 cd backend
 npm install
 npm run dev
+```
 
 ---
 
-Frontend
+### 🌐 Frontend
 
-Abrir o arquivo:
-
-frontend/index.html
+```bash
+open frontend/index.html
+```
 
 ---
 
