@@ -79,6 +79,10 @@ function renderLeads(leads) {
       <strong>Empresa:</strong> ${lead.empresa || "-"}<br>
       <strong>Mensagem:</strong> ${lead.mensagem || "-"}<br>
       <small>Criado em: ${new Date(lead.created_at).toLocaleString("pt-BR")}</small>
+      
+      <br><br>
+      <button onclick="editLead(${lead.id})">Editar</button>
+      <button onclick="deleteLead(${lead.id})">Excluir</button>
     `;
 
     container.appendChild(div);
@@ -105,6 +109,54 @@ function renderPagination(pagination) {
       Próxima
     </button>
   `;
+}
+
+async function deleteLead(id) {
+  const confirmDelete = confirm("Deseja excluir este lead?");
+  if (!confirmDelete) return;
+
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API_URL}/leads/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  loadLeads(currentPage);
+}
+
+async function editLead(id) {
+  const nome = prompt("Novo nome:");
+  const email = prompt("Novo email:");
+  const telefone = prompt("Novo telefone:");
+  const empresa = prompt("Nova empresa:");
+  const mensagem = prompt("Nova mensagem:");
+
+  if (!nome || !email) {
+    alert("Nome e email são obrigatórios");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API_URL}/leads/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      nome,
+      email,
+      telefone,
+      empresa,
+      mensagem
+    })
+  });
+
+  loadLeads(currentPage);
 }
 
 function previousPage() {
