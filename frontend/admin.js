@@ -73,16 +73,36 @@ function renderLeads(leads) {
     div.classList.add("lead");
 
     div.innerHTML = `
-      <strong>Nome:</strong> ${lead.nome}<br>
-      <strong>Email:</strong> ${lead.email}<br>
-      <strong>Telefone:</strong> ${lead.telefone || "-"}<br>
-      <strong>Empresa:</strong> ${lead.empresa || "-"}<br>
-      <strong>Mensagem:</strong> ${lead.mensagem || "-"}<br>
-      <small>Criado em: ${new Date(lead.created_at).toLocaleString("pt-BR")}</small>
-      
-      <br><br>
-      <button onclick="editLead(${lead.id})">Editar</button>
-      <button onclick="deleteLead(${lead.id})">Excluir</button>
+      <div class="lead-info" id="lead-info-${lead.id}">
+        <div>
+          <h3>${lead.nome}</h3>
+          <p><strong>E-mail:</strong> ${lead.email}</p>
+          <p><strong>Empresa:</strong> ${lead.empresa || "-"}</p>
+          <p><strong>Mensagem:</strong> ${lead.mensagem || "-"}</p>
+          <p><strong>Recebido em:</strong> ${new Date(lead.created_at).toLocaleString("pt-BR")}</p>
+        </div>
+
+        <div>
+          <p><strong>Telefone:</strong> ${lead.telefone || "-"}</p>
+          <p><strong>ID:</strong> ${lead.id}</p>
+        </div>
+      </div>
+
+      <div class="lead-actions">
+        <button onclick="showEditForm(${lead.id})">Editar</button>
+        <button class="delete-btn" onclick="deleteLead(${lead.id})">Excluir</button>
+      </div>
+
+      <div class="edit-form" id="edit-form-${lead.id}" style="display: none;">
+        <input type="text" id="edit-nome-${lead.id}" value="${lead.nome}">
+        <input type="email" id="edit-email-${lead.id}" value="${lead.email}">
+        <input type="text" id="edit-telefone-${lead.id}" value="${lead.telefone || ""}">
+        <input type="text" id="edit-empresa-${lead.id}" value="${lead.empresa || ""}">
+        <textarea id="edit-mensagem-${lead.id}">${lead.mensagem || ""}</textarea>
+
+        <button onclick="saveLead(${lead.id})">Salvar</button>
+        <button onclick="cancelEdit(${lead.id})">Cancelar</button>
+      </div>
     `;
 
     container.appendChild(div);
@@ -127,33 +147,37 @@ async function deleteLead(id) {
   loadLeads(currentPage);
 }
 
-async function editLead(id) {
-  const nome = prompt("Novo nome:");
-  const email = prompt("Novo email:");
-  const telefone = prompt("Novo telefone:");
-  const empresa = prompt("Nova empresa:");
-  const mensagem = prompt("Nova mensagem:");
+function showEditForm(id) {
+  document.getElementById(`edit-form-${id}`).style.display = "grid";
+}
 
-  if (!nome || !email) {
-    alert("Nome e email são obrigatórios");
+function cancelEdit(id) {
+  document.getElementById(`edit-form-${id}`).style.display = "none";
+}
+
+async function saveLead(id) {
+  const token = localStorage.getItem("token");
+
+  const data = {
+    nome: document.getElementById(`edit-nome-${id}`).value.trim(),
+    email: document.getElementById(`edit-email-${id}`).value.trim(),
+    telefone: document.getElementById(`edit-telefone-${id}`).value.trim(),
+    empresa: document.getElementById(`edit-empresa-${id}`).value.trim(),
+    mensagem: document.getElementById(`edit-mensagem-${id}`).value.trim(),
+  };
+
+  if (!data.nome || !data.email) {
+    alert("Nome e email são obrigatórios.");
     return;
   }
-
-  const token = localStorage.getItem("token");
 
   await fetch(`${API_URL}/leads/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      nome,
-      email,
-      telefone,
-      empresa,
-      mensagem
-    })
+    body: JSON.stringify(data),
   });
 
   loadLeads(currentPage);

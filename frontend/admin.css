@@ -1,49 +1,133 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: white;
-    text-align: center;
-  }
-  
-  .login-container, .dashboard {
-    margin-top: 100px;
-  }
-  
-  input {
-    padding: 10px;
-    margin: 10px;
-    width: 250px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background: #ff0055;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  
-  #leadsList {
-    margin-top: 30px;
-  }
-  
-  .lead {
-    background: #222;
-    padding: 15px;
-    margin: 10px auto;
-    width: 300px;
-    text-align: left;
+  font-family: Arial, sans-serif;
+  background: #0b1f3a;
+  color: #f5f7ff;
+  margin: 0;
+  padding: 0;
+}
+
+/* CONTAINERS */
+.login-container,
+.dashboard {
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 20px;
+}
+
+/* INPUTS */
+input,
+textarea {
+  padding: 12px;
+  margin: 6px 0;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+/* BOTÕES GERAIS */
+button {
+  padding: 10px 16px;
+  background: #ff005c;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* LISTA */
+#leadsList {
+  margin-top: 40px;
+}
+
+/* CARD DO LEAD */
+.lead {
+  background: #142b52;
+  border-radius: 18px;
+  padding: 28px;
+  margin: 24px 0;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* GRID INTERNO */
+.lead-info {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+}
+
+/* TITULO */
+.lead h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* TEXTO */
+.lead p {
+  margin: 10px 0;
+  color: #d7def0;
+}
+
+.lead strong {
+  color: #ffffff;
+}
+
+/* AÇÕES */
+.lead-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+/* BOTÃO EXCLUIR */
+.delete-btn {
+  background: #1a1a1a;
+}
+
+/* FORM DE EDIÇÃO */
+.edit-form {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.edit-form button {
+  width: fit-content;
+}
+
+/* PAGINAÇÃO */
+#pagination {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+#pagination span {
+  font-weight: bold;
+}
+
+#pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .lead-info {
+    grid-template-columns: 1fr;
   }
 
-  #pagination {
-    margin: 30px 0;
+  .login-container,
+  .dashboard {
+    margin: 40px 20px;
   }
-  
-  #pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  #pagination span {
-    margin: 0 15px;
-  }
+}
