@@ -108,6 +108,7 @@ teo-comunicacao-landing/
 DATABASE_URL=
 JWT_SECRET=
 ADMIN_PASSWORD_HASH=
+```
 
 ---
 
