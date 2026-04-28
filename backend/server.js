@@ -127,7 +127,7 @@ app.get("/db-test", async (req, res) => {
   app.get("/leads", authMiddleware, async (req, res) => {
     try {
       const page = Number(req.query.page) || 1;
-      const limit = 15;
+      const limit = Number(req.query.limit) || 15;
       const offset = (page - 1) * limit;
   
       const leadsResult = await pool.query(
