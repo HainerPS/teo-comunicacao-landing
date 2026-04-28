@@ -34,3 +34,16 @@ body {
     width: 300px;
     text-align: left;
   }
+
+  #pagination {
+    margin: 30px 0;
+  }
+  
+  #pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  #pagination span {
+    margin: 0 15px;
+  }
