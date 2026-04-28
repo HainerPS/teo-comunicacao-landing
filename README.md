@@ -84,6 +84,8 @@ O sistema permite:
 ---
 
 ## ⚙️ Estrutura do projeto
+
+```bash
 teo-comunicacao-landing/
 │
 ├── frontend/
@@ -98,7 +100,7 @@ teo-comunicacao-landing/
 │ ├── server.js
 │ ├── database.js
 │ └── package.json
-
+```
 
 ---
 
@@ -133,12 +135,12 @@ open frontend/index.html
 
 ## 📈 Melhorias implementadas
 
-CRUD completo de leads
-Paginação otimizada
-Segurança com JWT
-Proteção contra envio duplicado
-Exportação de dados em CSV
-Interface administrativa funcional
+- CRUD completo de leads
+- Paginação otimizada
+- Segurança com JWT
+- Proteção contra envio duplicado
+- Exportação de dados em CSV
+- Interface administrativa funcional
 
 
 ---
@@ -147,13 +149,13 @@ Interface administrativa funcional
 
 Projeto desenvolvido com foco em uso real por cliente, podendo ser utilizado como:
 
-Landing page de marketing
-Sistema simples de CRM
-Base para aplicações maiores
+- Landing page de marketing
+- Sistema simples de CRM
+- Base para aplicações maiores
 
 ---
 
 ## 👨‍💻 Autor
 
-Desenvolvido por Hainer Soares
+Desenvolvido por Hainer Soares  
 🔗 https://github.com/HainerPS
