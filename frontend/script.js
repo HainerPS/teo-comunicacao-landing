@@ -3,6 +3,7 @@ const API_URL = "https://teo-backend-az8f.onrender.com";
 const form = document.getElementById("leadForm");
 const successMsg = document.getElementById("successMsg");
 const errorMsg = document.getElementById("errorMsg");
+const submitButton = form.querySelector("button");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -10,12 +11,15 @@ form.addEventListener("submit", async (e) => {
   successMsg.style.display = "none";
   errorMsg.style.display = "none";
 
+  submitButton.disabled = true;
+  submitButton.textContent = "Enviando...";
+
   const data = {
-    nome: document.getElementById("nome").value,
-    email: document.getElementById("email").value,
-    telefone: document.getElementById("telefone").value,
-    empresa: document.getElementById("empresa").value,
-    mensagem: document.getElementById("mensagem").value,
+    nome: document.getElementById("nome").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    telefone: document.getElementById("telefone").value.trim(),
+    empresa: document.getElementById("empresa").value.trim(),
+    mensagem: document.getElementById("mensagem").value.trim(),
   };
 
   try {
@@ -37,5 +41,9 @@ form.addEventListener("submit", async (e) => {
   } catch (error) {
     console.error(error);
     errorMsg.style.display = "block";
+
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Quero mais resultados";
   }
 });
