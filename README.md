@@ -111,7 +111,7 @@ ADMIN_PASSWORD_HASH=
 
 ---
 
-🚀 Como rodar localmente
+## 🚀 Como rodar localmente
 Backend
 
 cd backend
@@ -128,7 +128,7 @@ frontend/index.html
 
 ---
 
-📈 Melhorias implementadas
+## 📈 Melhorias implementadas
 
 CRUD completo de leads
 Paginação otimizada
@@ -140,7 +140,7 @@ Interface administrativa funcional
 
 ---
 
-💰 Aplicação real
+## 💰 Aplicação real
 
 Projeto desenvolvido com foco em uso real por cliente, podendo ser utilizado como:
 
@@ -150,7 +150,7 @@ Base para aplicações maiores
 
 ---
 
-👨‍💻 Autor
+## 👨‍💻 Autor
 
 Desenvolvido por Hainer Soares
 🔗 https://github.com/HainerPS
