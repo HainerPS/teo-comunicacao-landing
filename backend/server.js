@@ -157,6 +157,74 @@ app.get("/db-test", async (req, res) => {
     }
   });
 
+  app.put("/leads/:id", authMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      let { nome, email, telefone, empresa, mensagem } = req.body;
+  
+      if (!nome || !email) {
+        return res.status(400).json({
+          error: "Nome e email são obrigatórios",
+        });
+      }
+  
+      nome = nome.trim();
+      email = email.trim();
+      telefone = telefone ? telefone.trim() : null;
+      empresa = empresa ? empresa.trim() : null;
+      mensagem = mensagem ? mensagem.trim() : null;
+  
+      const result = await pool.query(
+        `UPDATE leads
+         SET nome = $1,
+             email = $2,
+             telefone = $3,
+             empresa = $4,
+             mensagem = $5
+         WHERE id = $6
+         RETURNING *`,
+        [nome, email, telefone, empresa, mensagem, id]
+      );
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "Lead não encontrado" });
+      }
+  
+      res.json({
+        message: "Lead atualizado com sucesso",
+        lead: result.rows[0],
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao atualizar lead" });
+    }
+  });
+  
+  app.delete("/leads/:id", authMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const result = await pool.query(
+        "DELETE FROM leads WHERE id = $1 RETURNING *",
+        [id]
+      );
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "Lead não encontrado" });
+      }
+  
+      res.json({
+        message: "Lead excluído com sucesso",
+        lead: result.rows[0],
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao excluir lead" });
+    }
+  });
+
   async function createLeadsTable() {
     try {
       await pool.query(`
