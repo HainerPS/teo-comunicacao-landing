@@ -199,3 +199,45 @@ function logout() {
   localStorage.removeItem("token");
   location.reload();
 }
+
+async function exportCSV() {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`${API_URL}/leads?page=1&limit=1000`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    const leads = data.leads;
+
+    if (!leads || leads.length === 0) {
+      alert("Nenhum lead para exportar.");
+      return;
+    }
+
+    // cabeçalho
+    let csv = "ID,Nome,Email,Telefone,Empresa,Mensagem,Data\n";
+
+    leads.forEach((lead) => {
+      csv += `${lead.id},"${lead.nome}","${lead.email}","${lead.telefone || ""}","${lead.empresa || ""}","${lead.mensagem || ""}","${new Date(lead.created_at).toLocaleString("pt-BR")}"\n`;
+    });
+
+    // download
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "leads.csv";
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao exportar CSV.");
+  }
+}
