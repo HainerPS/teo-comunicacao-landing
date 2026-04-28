@@ -126,11 +126,30 @@ app.get("/db-test", async (req, res) => {
 
   app.get("/leads", authMiddleware, async (req, res) => {
     try {
-      const result = await pool.query(
-        "SELECT * FROM leads ORDER BY created_at DESC"
+      const page = Number(req.query.page) || 1;
+      const limit = 15;
+      const offset = (page - 1) * limit;
+  
+      const leadsResult = await pool.query(
+        `SELECT * FROM leads 
+         ORDER BY created_at DESC 
+         LIMIT $1 OFFSET $2`,
+        [limit, offset]
       );
   
-      res.json(result.rows);
+      const countResult = await pool.query("SELECT COUNT(*) FROM leads");
+      const totalLeads = Number(countResult.rows[0].count);
+      const totalPages = Math.ceil(totalLeads / limit);
+  
+      res.json({
+        leads: leadsResult.rows,
+        pagination: {
+          page,
+          limit,
+          totalLeads,
+          totalPages,
+        },
+      });
   
     } catch (error) {
       console.error(error);
