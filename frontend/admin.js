@@ -2,6 +2,8 @@ const API_URL = "https://teo-backend-az8f.onrender.com";
 
 let currentPage = 1;
 
+let currentFilter = "";
+
 window.onload = () => {
   const token = localStorage.getItem("token");
 
@@ -33,6 +35,12 @@ async function login() {
   }
 }
 
+function setFilter(origem) {
+  currentFilter = origem;
+  currentPage = 1;
+  loadLeads(currentPage);
+}
+
 function showDashboard() {
   document.getElementById("loginContainer").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
@@ -41,11 +49,15 @@ function showDashboard() {
 async function loadLeads(page = 1) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/leads?page=${page}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+  const url = `${API_URL}/leads?page=${page}${currentFilter ? `&origem=${encodeURIComponent(currentFilter)}` : ""}`;
+
+  console.log("URL chamada:", url);
+
+  const res = await fetch(url, {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
 
   if (res.status === 401) {
     alert("Sessão expirada. Faça login novamente.");
