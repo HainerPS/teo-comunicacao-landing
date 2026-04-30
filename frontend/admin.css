@@ -131,3 +131,16 @@ button:hover {
     margin: 40px 20px;
   }
 }
+
+.filters button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+}
