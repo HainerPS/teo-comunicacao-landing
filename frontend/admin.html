@@ -14,23 +14,20 @@
   </div>
 
   <div class="dashboard" id="dashboard" style="display: none;">
-    
     <h2>Leads Recebidos</h2>
 
-    <!-- 🔥 NOVO: FILTROS -->
     <div class="filters">
       <button onclick="setFilter('')">Todos</button>
       <button onclick="setFilter('Landing Page')">Landing Page</button>
       <button onclick="setFilter('Site Institucional')">Site</button>
     </div>
-
+    
     <div class="actions">
       <button onclick="exportCSV()">Exportar CSV</button>
       <button onclick="logout()">Sair</button>
     </div>
 
     <div id="leadsList"></div>
-
   </div>
 
   <script src="admin.js"></script>
