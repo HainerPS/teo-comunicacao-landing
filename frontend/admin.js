@@ -72,6 +72,8 @@ function renderLeads(leads) {
     const div = document.createElement("div");
     div.classList.add("lead");
 
+    const origem = lead.origem || "Landing Page";
+
     div.innerHTML = `
       <div class="lead-info" id="lead-info-${lead.id}">
         <div>
@@ -79,6 +81,7 @@ function renderLeads(leads) {
           <p><strong>E-mail:</strong> ${lead.email}</p>
           <p><strong>Empresa:</strong> ${lead.empresa || "-"}</p>
           <p><strong>Mensagem:</strong> ${lead.mensagem || "-"}</p>
+          <p><strong>Origem:</strong> ${origem}</p>
           <p><strong>Recebido em:</strong> ${new Date(lead.created_at).toLocaleString("pt-BR")}</p>
         </div>
 
@@ -99,6 +102,7 @@ function renderLeads(leads) {
         <input type="text" id="edit-telefone-${lead.id}" value="${lead.telefone || ""}">
         <input type="text" id="edit-empresa-${lead.id}" value="${lead.empresa || ""}">
         <textarea id="edit-mensagem-${lead.id}">${lead.mensagem || ""}</textarea>
+        <input type="hidden" id="edit-origem-${lead.id}" value="${origem}">
 
         <button onclick="saveLead(${lead.id})">Salvar</button>
         <button onclick="cancelEdit(${lead.id})">Cancelar</button>
@@ -164,6 +168,7 @@ async function saveLead(id) {
     telefone: document.getElementById(`edit-telefone-${id}`).value.trim(),
     empresa: document.getElementById(`edit-empresa-${id}`).value.trim(),
     mensagem: document.getElementById(`edit-mensagem-${id}`).value.trim(),
+    origem: document.getElementById(`edit-origem-${id}`).value.trim(),
   };
 
   if (!data.nome || !data.email) {
@@ -218,14 +223,12 @@ async function exportCSV() {
       return;
     }
 
-    // cabeçalho
-    let csv = "ID,Nome,Email,Telefone,Empresa,Mensagem,Data\n";
+    let csv = "ID,Nome,Email,Telefone,Empresa,Mensagem,Origem,Data\n";
 
     leads.forEach((lead) => {
-      csv += `${lead.id},"${lead.nome}","${lead.email}","${lead.telefone || ""}","${lead.empresa || ""}","${lead.mensagem || ""}","${new Date(lead.created_at).toLocaleString("pt-BR")}"\n`;
+      csv += `${lead.id},"${lead.nome}","${lead.email}","${lead.telefone || ""}","${lead.empresa || ""}","${lead.mensagem || ""}","${lead.origem || "Landing Page"}","${new Date(lead.created_at).toLocaleString("pt-BR")}"\n`;
     });
 
-    // download
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
 
@@ -235,7 +238,6 @@ async function exportCSV() {
     a.click();
 
     window.URL.revokeObjectURL(url);
-
   } catch (error) {
     console.error(error);
     alert("Erro ao exportar CSV.");
