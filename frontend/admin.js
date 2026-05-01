@@ -1,7 +1,6 @@
 const API_URL = "https://teo-backend-az8f.onrender.com";
 
 let currentPage = 1;
-
 let currentFilter = "";
 
 window.onload = () => {
@@ -10,6 +9,7 @@ window.onload = () => {
   if (token) {
     showDashboard();
     loadLeads(currentPage);
+    loadLeadStats();
   }
 };
 
@@ -19,9 +19,9 @@ async function login() {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ password })
+    body: JSON.stringify({ password }),
   });
 
   const data = await res.json();
@@ -30,9 +30,15 @@ async function login() {
     localStorage.setItem("token", data.token);
     showDashboard();
     loadLeads(currentPage);
+    loadLeadStats();
   } else {
     alert("Senha incorreta");
   }
+}
+
+function showDashboard() {
+  document.getElementById("loginContainer").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
 }
 
 function setFilter(origem) {
@@ -41,23 +47,27 @@ function setFilter(origem) {
   loadLeads(currentPage);
 }
 
-function showDashboard() {
-  document.getElementById("loginContainer").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
+function buildLeadsUrl(page = 1, limit = 15, origem = currentFilter) {
+  const params = new URLSearchParams({
+    page,
+    limit,
+  });
+
+  if (origem) {
+    params.append("origem", origem);
+  }
+
+  return `${API_URL}/leads?${params.toString()}`;
 }
 
 async function loadLeads(page = 1) {
   const token = localStorage.getItem("token");
 
-  const url = `${API_URL}/leads?page=${page}${currentFilter ? `&origem=${encodeURIComponent(currentFilter)}` : ""}`;
-
-  console.log("URL chamada:", url);
-
-  const res = await fetch(url, {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
+  const res = await fetch(buildLeadsUrl(page), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (res.status === 401) {
     alert("Sessão expirada. Faça login novamente.");
@@ -69,6 +79,44 @@ async function loadLeads(page = 1) {
 
   renderLeads(data.leads);
   renderPagination(data.pagination);
+}
+
+async function loadLeadStats() {
+  const token = localStorage.getItem("token");
+
+  try {
+    const [totalRes, siteRes, landingRes] = await Promise.all([
+      fetch(buildLeadsUrl(1, 1, ""), {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(buildLeadsUrl(1, 1, "Site Institucional"), {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(buildLeadsUrl(1, 1, "Landing Page"), {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    ]);
+
+    if (totalRes.status === 401 || siteRes.status === 401 || landingRes.status === 401) {
+      alert("Sessão expirada. Faça login novamente.");
+      logout();
+      return;
+    }
+
+    const totalData = await totalRes.json();
+    const siteData = await siteRes.json();
+    const landingData = await landingRes.json();
+
+    const totalLeads = document.getElementById("totalLeads");
+    const siteLeads = document.getElementById("siteLeads");
+    const landingLeads = document.getElementById("landingLeads");
+
+    if (totalLeads) totalLeads.textContent = totalData.pagination.totalLeads;
+    if (siteLeads) siteLeads.textContent = siteData.pagination.totalLeads;
+    if (landingLeads) landingLeads.textContent = landingData.pagination.totalLeads;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function renderLeads(leads) {
@@ -156,11 +204,12 @@ async function deleteLead(id) {
   await fetch(`${API_URL}/leads/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   loadLeads(currentPage);
+  loadLeadStats();
 }
 
 function showEditForm(id) {
@@ -198,6 +247,7 @@ async function saveLead(id) {
   });
 
   loadLeads(currentPage);
+  loadLeadStats();
 }
 
 function previousPage() {
@@ -221,7 +271,7 @@ async function exportCSV() {
   const token = localStorage.getItem("token");
 
   try {
-    const res = await fetch(`${API_URL}/leads?page=1&limit=1000`, {
+    const res = await fetch(buildLeadsUrl(1, 1000, currentFilter), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
